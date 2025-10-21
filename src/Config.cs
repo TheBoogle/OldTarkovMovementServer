@@ -1,4 +1,4 @@
-using fastJSON5;
+using SPTarkov.DI;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Helpers;
@@ -11,7 +11,7 @@ using SPTarkov.Server.Core.Utils;
 using System.Net;
 using System.Reflection;
 
-namespace OldTarkovMovementConfig;
+namespace OldTarkovMovementServer;
 
 /// <summary>
 /// Metadata for this mod.
@@ -38,6 +38,7 @@ public record ModMetadata : AbstractModMetadata
 [Injectable(TypePriority = OnLoadOrder.PreSptModLoader + 1)]
 public class OldTarkovMovementLoader(
     ISptLogger<OldTarkovMovementLoader> Logger,
+    JsonUtil jsonUtil,
     ModHelper ModHelper)
     : IOnLoad
 {
@@ -69,7 +70,7 @@ public class OldTarkovMovementLoader(
 
         var ConfigData = ModHelper.GetRawFileData(ConfigFolder, "settings.jsonc");
 
-        LoadedConfig = JSON5.ToObject<OldTarkovMovementConfig>(ConfigData);
+        LoadedConfig = jsonUtil.Deserialize<OldTarkovMovementConfig>(ConfigData);
 
         Logger.Success($"Loaded Old Tarkov Movement config from: {ConfigPath}");
 
@@ -86,31 +87,31 @@ public class OldTarkovMovementRouter : StaticRouter
     private static HttpResponseUtil _HttpResponseUtil;
 
     public OldTarkovMovementRouter(JsonUtil JsonUtil, HttpResponseUtil HttpResponseUtil)
-        : base(JsonUtil, GetCustomRoutes())
+        : base(JsonUtil, GetCustomRoutes(JsonUtil))
     {
         _HttpResponseUtil = HttpResponseUtil;
     }
 
-    private static List<RouteAction> GetCustomRoutes()
+    private static List<RouteAction> GetCustomRoutes(JsonUtil JsonUtil)
     {
         return
         [
             new RouteAction(
                 "/OldTarkovMovement/GetConfig",
                 async (url, info, sessionId, output) =>
-                    await HandleRoute(url, info, sessionId)
+                    await HandleRoute(url, JsonUtil, info, sessionId)
             )
         ];
     }
 
-    private static ValueTask<string> HandleRoute(string Url, IRequestData Info, MongoId SessionId)
+    private static ValueTask<string> HandleRoute(string Url, JsonUtil jsonUtil, IRequestData Info, MongoId SessionId)
     {
         if (OldTarkovMovementLoader.LoadedConfig is null)
         {
             return new ValueTask<string>("Config not loaded");
         }
 
-        var Json = JSON5.ToJSON(OldTarkovMovementLoader.LoadedConfig, new JSON5Parameters { UseEscapedUnicode = false, SerializeNullValues = false });
+        var Json = jsonUtil.Serialize(OldTarkovMovementLoader.LoadedConfig);
         return new ValueTask<string>(Json);
     }
 }

@@ -13,10 +13,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="fastJSON5">
-      <HintPath>..\..\..\..\Downloads\fastJSON5.1.0.4\output\net7.0\fastJSON5.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>W:\SPT400\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
