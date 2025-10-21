@@ -1,0 +1,24 @@
+{
+	// Actually enables the inertia-less movement, setting to false will mean you have inertia
+	"NoInertia": true,
+
+	// Having this on will make leaning much faster like it used to be
+	"QuickTilting": true,
+
+	// Do bushes slow you down when running through them or not
+	"DoBushesSlowYouDown": false,
+
+	// Determines if AI bots will use the old (mod) movement or not, turning this off will make them less insane.
+	"BotsUseOldMovement": true,
+
+	// Does aiming reduce movement speed
+	"DoesAimingSlowYouDown": true,
+
+	// Makes looking around much smoother, removes the "jittering" or "fidgeting", designed for new players and dads
+	// This setting may cause issues, it's not been tested much.
+	"RemoveJitteryRotation": false
+
+	// If you are looking for the nostalgia mode (old animations) I have decided to stop supporting it.
+
+	// For any & all help, reach out to me on Discord: @LeBoogle
+}

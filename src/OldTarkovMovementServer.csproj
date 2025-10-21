@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>OldTarkovMovementServer</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <Version>0.0.1</Version>
+    <!-- The two lines below will set the output path for the binaries -->
+    <OutputPath>bin\$(Configuration)\$(ProjectName)\$(AssemblyName)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="fastJSON5">
+      <HintPath>..\..\..\..\Downloads\fastJSON5.1.0.4\output\net7.0\fastJSON5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>W:\SPT400\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SemanticVersioning">
+      <HintPath>W:\SPT400\SPT\SemanticVersioning.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SPTarkov.Common">
+      <HintPath>W:\SPT400\SPT\SPTarkov.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SPTarkov.DI">
+      <HintPath>W:\SPT400\SPT\SPTarkov.DI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SPTarkov.Server.Core">
+      <HintPath>W:\SPT400\SPT\SPTarkov.Server.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config\settings.jsonc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
