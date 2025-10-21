@@ -13,26 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>W:\SPT400\EscapeFromTarkov_Data\Managed\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SemanticVersioning">
-      <HintPath>W:\SPT400\SPT\SemanticVersioning.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SPTarkov.Common">
-      <HintPath>W:\SPT400\SPT\SPTarkov.Common.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SPTarkov.DI">
-      <HintPath>W:\SPT400\SPT\SPTarkov.DI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="SPTarkov.Server.Core">
-      <HintPath>W:\SPT400\SPT\SPTarkov.Server.Core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
+    <PackageReference Include="SPTarkov.Common" Version="4.0.1" />
+    <PackageReference Include="SPTarkov.DI" Version="4.0.1" />
+    <PackageReference Include="SPTarkov.Reflection" Version="4.0.1" />
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
