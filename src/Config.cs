@@ -18,11 +18,11 @@ namespace OldTarkovMovementServer;
 /// </summary>
 public record ModMetadata : AbstractModMetadata
 {
-    public override string ModGuid { get; init; } = "com.boogle.oldtarkovmovementserver";
-    public override string Name { get; init; } = "OlTarkovMovementServer";
+    public override string ModGuid { get; init; } = "com.boogle.oldtarkovmovement";
+    public override string Name { get; init; } = "OldTarkovMovement";
     public override string Author { get; init; } = "Boogle";
     public override List<string>? Contributors { get; init; }
-    public override SemanticVersioning.Version Version { get; init; } = new("1.1.1");
+    public override SemanticVersioning.Version Version { get; init; } = new("1.1.2");
     public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0.0");
 
     public override List<string>? Incompatibilities { get; init; }
