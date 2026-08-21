@@ -1,41 +1,39 @@
+using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
-using SPTarkov.Server.Core.Helpers;
+using SPTarkov.Server.Core.Helpers.Server;
 using SPTarkov.Server.Core.Models.Common;
-using SPTarkov.Server.Core.Models.Logging;
 using SPTarkov.Server.Core.Models.Spt.Config;
 using SPTarkov.Server.Core.Models.Spt.Mod;
 using SPTarkov.Server.Core.Models.Utils;
 using SPTarkov.Server.Core.Utils;
-using System.Net;
 using System.Reflection;
 
-namespace OldTarkovMovementServer;
+namespace ClassicMovementServer;
 
 /// <summary>
 /// Metadata for this mod.
 /// </summary>
-public record ModMetadata : AbstractModMetadata
+public record ModMetadata : IModMetadata
 {
-    public override string ModGuid { get; init; } = "com.boogle.oldtarkovmovement";
-    public override string Name { get; init; } = "OldTarkovMovement";
-    public override string Author { get; init; } = "Boogle";
-    public override List<string>? Contributors { get; init; }
-    public override SemanticVersioning.Version Version { get; init; } = new("1.1.2");
-    public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0.0");
-
-    public override List<string>? Incompatibilities { get; init; }
-    public override Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; }
-    public override string? Url { get; init; } = "https://forge.sp-tarkov.com/mod/1860/old-tarkov-movement-no-inertia";
-    public override bool? IsBundleMod { get; init; } = false;
-    public override string? License { get; init; } = "MIT";
+    public string ModGuid { get; init; } = "com.boogle.classicmovement";
+    public string Name { get; init; } = "ClassicMovement";
+    public string Author { get; init; } = "Boogle";
+    public List<string>? Contributors { get; init; }
+    public SemanticVersioning.Version Version { get; init; } = new("1.1.3");
+    public SemanticVersioning.Range SptVersion { get; init; } = new("~4.1.0");
+    public bool HasPrepatcher { get; init; } = false;
+    public List<string>? Incompatibilities { get; init; }
+    public Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; }
+    public string? Url { get; init; } = "https://sp-mod.com/mod/1860/classic-movement";
+    public string? License { get; init; } = "MIT";
 }
 
 /// <summary>
 /// Loads the config file on startup and makes it available to the router.
 /// </summary>
-[Injectable(TypePriority = OnLoadOrder.PreSptModLoader + 1)]
+[Injectable(TypePriority = OnLoadOrder.Preload + 1)]
 public class OldTarkovMovementLoader(
     ISptLogger<OldTarkovMovementLoader> Logger,
     JsonUtil jsonUtil,
@@ -55,7 +53,7 @@ public class OldTarkovMovementLoader(
         public bool RemoveJitteryRotation { get; set; }
     }
 
-    public Task OnLoad()
+    public Task OnLoadAsync(CancellationToken cancellationToken = default)
     {
         var PathToMod = ModHelper.GetAbsolutePathToModFolder(Assembly.GetExecutingAssembly());
 
@@ -72,7 +70,7 @@ public class OldTarkovMovementLoader(
 
         LoadedConfig = jsonUtil.Deserialize<OldTarkovMovementConfig>(ConfigData);
 
-        Logger.Success($"Loaded Old Tarkov Movement config from: {ConfigPath}");
+        Logger.Success($"Loaded Classic Movement config from: {ConfigPath}");
 
         return Task.CompletedTask;
     }
@@ -97,21 +95,21 @@ public class OldTarkovMovementRouter : StaticRouter
         return
         [
             new RouteAction(
-                "/OldTarkovMovement/GetConfig",
-                async (url, info, sessionId, output) =>
+                "/ClassicMovement/GetConfig",
+                async (url, info, sessionId, output, cancellationToken) =>
                     await HandleRoute(url, JsonUtil, info, sessionId)
             )
         ];
     }
 
-    private static ValueTask<string> HandleRoute(string Url, JsonUtil jsonUtil, IRequestData Info, MongoId SessionId)
+    private static ValueTask<object> HandleRoute(string Url, JsonUtil jsonUtil, IRequestData Info, MongoId SessionId)
     {
         if (OldTarkovMovementLoader.LoadedConfig is null)
         {
-            return new ValueTask<string>("Config not loaded");
+            return new ValueTask<object>("Config not loaded");
         }
 
         var Json = jsonUtil.Serialize(OldTarkovMovementLoader.LoadedConfig);
-        return new ValueTask<string>(Json);
+        return new ValueTask<object>(Json);
     }
 }
